@@ -1,0 +1,34 @@
+{
+  "name": "dravencms/antiq-captcha",
+  "type": "dravencms-package",
+  "description": "DravenCMS antiq captcha",
+  "keywords": [
+    "dravencms",
+    "antiq-captcha"
+  ],
+  "license": [
+    "LGPL-3.0"
+  ],
+  "authors": [
+    {
+      "name": "Adam Schubert"
+    }
+  ],
+  "provide": {
+    "dravencms/captcha-implementation": "0.0.1"
+  },
+  "require": {
+    "dravencms/icaptcha": ">=0.0.1",
+    "gregwar/captcha": "^1.2.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Dravencms\\AntiqCaptcha\\": "src/"
+    }
+  },
+  "extra": {
+    "dravencms": {
+      "configuration": "dravencms.config.neon"
+    }
+  }
+}

@@ -1,0 +1,2 @@
+extensions:
+    dravencms.antiqCaptcha: Dravencms\AntiqCaptcha\DI\AntiqCaptchaExtension
