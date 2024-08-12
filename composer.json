@@ -28,6 +28,9 @@
   },
   "extra": {
     "dravencms": {
+      "files": {
+        "assets/*": "%wwwDir%/assets/antiqCaptcha"
+      },
       "configuration": "dravencms.config.neon"
     }
   }

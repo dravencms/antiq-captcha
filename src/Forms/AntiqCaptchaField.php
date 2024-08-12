@@ -5,7 +5,6 @@ namespace Dravencms\AntiqCaptcha\Forms;
 use Dravencms\Captcha\Forms\ICaptchaField;
 use Dravencms\AntiqCaptcha\AntiqCaptchaProvider;
 use Nette\Forms\Controls\TextInput;
-use Nette\Forms\Form;
 use Nette\Forms\Rules;
 use Nette\Utils\Html;
 
@@ -24,17 +23,10 @@ class AntiqCaptchaField extends TextInput implements ICaptchaField
 		$this->provider = $provider;
 
 		$this->setOmitted(true);
-		//$this->control = Html::el('div');
-		$this->control->addClass('WTF');
+
+		$this->control->addClass('antiq-captcha');
 
 		$this->message = $message;
-	}
-
-	public function loadHttpData(): void
-	{
-		$form = $this->getForm();
-		assert($form !== null);
-		$this->setValue($form->getHttpData(Form::DataText, AntiqCaptchaProvider::FORM_PARAMETER));
 	}
 
 	public function setMessage(string $message): self
@@ -71,6 +63,7 @@ class AntiqCaptchaField extends TextInput implements ICaptchaField
 		$el->addAttributes([
 			'id' => $this->getHtmlId(),
 			'name' => $this->getHtmlName(),
+			'data-captcha' => $this->provider->buildCaptcha()->inline()
 		]);
 
 		return $el;

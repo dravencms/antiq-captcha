@@ -6,8 +6,12 @@ use Nette\SmartObject;
 use Dravencms\Captcha\ICaptchaProvider;
 use Dravencms\Captcha\Forms\ICaptchaField;
 use Dravencms\AntiqCaptcha\Forms\AntiqCaptchaField;
-
+use Gregwar\Captcha\CaptchaBuilder;
+use Gregwar\Captcha\PhraseBuilder;
 use Nette\Forms\Controls\BaseControl;
+use Nette\Http\Session;
+use Nette\Http\SessionSection;
+
 
 class AntiqCaptchaProvider implements ICaptchaProvider
 {
@@ -20,23 +24,24 @@ class AntiqCaptchaProvider implements ICaptchaProvider
 	/** @var callable[] */
 	public array $onValidateControl = [];
 
-	private string $phraseLenght;
+	/** @var SessionSection */
+	private $sessionSection;
 
-    const FORM_PARAMETER = 'h-captcha-response';
+	private $phraseBuilder;
 
-    public function __construct(int $phraseLenght)
+    public function __construct(int $phraseLenght, Session $session)
     {
-        $this->phraseLenght = $phraseLenght;
+		$this->sessionSection = $session->getSection('antiqCaptcha');
+		$this->phraseBuilder = new PhraseBuilder($phraseLenght);
     }
-/*
-    public function validate(string $response): ?Response
+
+    public function validate(string $response): bool
 	{
 		// Fire events!
 		$this->onValidate($this, $response);
-
-        return $this->verify($response);
+        return $this->phraseBuilder->niceize($this->sessionSection->get('code')) == $this->phraseBuilder->niceize($response);
 	}
-*/
+
 	public function validateControl(BaseControl $control): bool
 	{
 		// Fire events!
@@ -45,14 +50,20 @@ class AntiqCaptchaProvider implements ICaptchaProvider
 		// Get response
 		/** @var scalar $value */
 		$value = $control->getValue();
-		return false;
-		$response = $this->validate(strval($value));
+		return $this->validate(strval($value));
+	}
 
+	public function buildCaptcha(): CaptchaBuilder {
+		
+		$captchaBuilder = new CaptchaBuilder(null, $this->phraseBuilder);
+		$this->sessionSection->set('code', $captchaBuilder->getPhrase());
+		$captchaBuilder->build();
 
-		return $response->isSuccess();
+		return $captchaBuilder;
 	}
 
     public function prepareField(string $label, ?string $message = null): ICaptchaField {
+		
         return new AntiqCaptchaField($this, $label, $message);
     }
 }
