@@ -1,2 +1,9 @@
 extensions:
     dravencms.antiqCaptcha: Dravencms\AntiqCaptcha\DI\AntiqCaptchaExtension
+
+
+webloader:
+    js:
+        frontend:
+            files:
+                - antiqCaptcha/antiqCaptcha.js
