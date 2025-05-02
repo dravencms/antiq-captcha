@@ -35,11 +35,11 @@ class AntiqCaptchaProvider implements ICaptchaProvider
 		$this->phraseBuilder = new PhraseBuilder($phraseLenght);
     }
 
-    public function validate(string $response): bool
+    public function validate(BaseControl $control, string $response): bool
 	{
 		// Fire events!
 		$this->onValidate($this, $response);
-        return $this->phraseBuilder->niceize($this->sessionSection->get('code')) == $this->phraseBuilder->niceize($response);
+        return $this->phraseBuilder->niceize($this->sessionSection->get('code'.$control->getHtmlId())) == $this->phraseBuilder->niceize($response);
 	}
 
 	public function validateControl(BaseControl $control): bool
@@ -50,13 +50,12 @@ class AntiqCaptchaProvider implements ICaptchaProvider
 		// Get response
 		/** @var scalar $value */
 		$value = $control->getValue();
-		return $this->validate(strval($value));
+		return $this->validate($control, strval($value));
 	}
 
-	public function buildCaptcha(): CaptchaBuilder {
-		
+	public function buildCaptcha(BaseControl $control): CaptchaBuilder {
 		$captchaBuilder = new CaptchaBuilder(null, $this->phraseBuilder);
-		$this->sessionSection->set('code', $captchaBuilder->getPhrase());
+		$this->sessionSection->set('code'.$control->getHtmlId(), $captchaBuilder->getPhrase());
 		$captchaBuilder->build();
 
 		return $captchaBuilder;

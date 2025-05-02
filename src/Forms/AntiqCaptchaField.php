@@ -63,7 +63,7 @@ class AntiqCaptchaField extends TextInput implements ICaptchaField
 		$el->addAttributes([
 			'id' => $this->getHtmlId(),
 			'name' => $this->getHtmlName(),
-			'data-captcha' => $this->provider->buildCaptcha()->inline()
+			'data-captcha' => $this->provider->buildCaptcha($this)->inline()
 		]);
 
 		return $el;
