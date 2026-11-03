@@ -19,7 +19,8 @@
   },
   "require": {
     "dravencms/icaptcha": ">=0.0.1",
-    "gregwar/captcha": "^1.2.0"
+    "gregwar/captcha": "^1.2.0",
+    "dravencms/packager": "^3.0"
   },
   "autoload": {
     "psr-4": {
@@ -28,10 +29,13 @@
   },
   "extra": {
     "dravencms": {
-      "files": {
-        "assets/*": "%wwwDir%/assets/antiqCaptcha"
-      },
-      "configuration": "dravencms.config.neon"
+      "configuration": "dravencms.config.neon",
+      "assets": {
+        "public": "%wwwDir%/assets/antiqCaptcha"
+      }
     }
+  },
+  "scripts": {
+    "build:assets": "build-public-assets"
   }
 }

@@ -37,3 +37,16 @@ Because verification depends on the session, ensure session cookies work on ever
 ## License
 
 This package is licensed under the LGPL-3.0 license.
+
+
+## Public assets
+
+Released packages include a generated `public/` directory. Packager 3 links it to
+`www/assets/` on every Composer install/update; existing asset URLs stay the same.
+Development sources, package metadata and tests are kept outside the public directory.
+
+After editing assets, install Composer dependencies and run `composer build:assets`.
+The explicit runtime file list is `assets/public-assets.json`; local CSS dependencies
+are included automatically. Commit `public/` and `public-assets.manifest.json` with
+the source changes. The builder rejects missing dependencies and locally modified
+or unmanaged generated files. Admin's `npm run build:admin` also rebuilds public assets.
